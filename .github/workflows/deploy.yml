@@ -11,21 +11,29 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3 # Updated to use the latest version
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: '20'
 
+      - name: Cache node modules
+        uses: actions/cache@v3
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
       - name: Install dependencies
-        uses: bahmutov/npm-install@v1
+        run: npm install # Direct npm install for better control
 
       - name: Build project
         run: npm run build
 
       - name: Upload production-ready build files
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v4 # Using consistent versions
         with:
           name: production-files
           path: ./dist
@@ -36,6 +44,9 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3 # Ensure repository context is available
+
       - name: Download artifact
         uses: actions/download-artifact@v4
         with:
