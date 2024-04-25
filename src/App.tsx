@@ -6,7 +6,6 @@ import { fromNano } from "@ton/core";
 import { useTonConnect } from './hooks/useTonConnect';
 import WebApp from '@twa-dev/sdk'
 
-WebApp.showAlert('Hey there!');
 
 // 0QAYVStSV_O3UREVGyTGrtGFaFgWkf_GAuUelza1LbTbK4qr
 
@@ -21,12 +20,6 @@ function App() {
 		sendDeposit,
 		sendWithdraw,
   } = useMainContract();
-	let cb : number
-	if (contract_balance != null) {
-			cb = contract_balance
-  } else {
-					cb = 1
-			}
 
     const { connected } = useTonConnect()
 
@@ -116,7 +109,6 @@ return (
       </div>
     </div>
   );
-}
 }
 
 export default App
